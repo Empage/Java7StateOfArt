@@ -1,3 +1,7 @@
+.project
+.texlipse
+*.pdf
+
 *.acn
 *.acr
 *.alg
