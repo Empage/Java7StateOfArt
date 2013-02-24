@@ -1,6 +1,7 @@
 .project
 .texlipse
 *.pdf
+.settings
 
 *.acn
 *.acr
