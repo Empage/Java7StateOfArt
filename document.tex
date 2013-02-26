@@ -10,7 +10,7 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{pdfpages}
-\hypersetup{pdftitle={Umlaut example: ^^c3^^b6}}
+\hypersetup{pdftitle={Java 7 - Stand der Technik}}
 \pagestyle{fancy}
 \footskip=5em
 
@@ -20,29 +20,32 @@ morekeywords={*,...} % if you want to add more keywords to the set
 }
 
 \author{Jonas Traub \& Matthis Hauschild}
-\title{Java 7}
-\date{\today}
+\title{Sprachänderungen aus Java 7}
 
 \lhead{}
-\chead{Java 7}
+\chead{Sprachänderungen aus Java 7}
 \rhead{\thepage}
-%\renewcommand{\headrulewidth}{1em}
-%\renewcommand{\footrulewidth}{.2em}
 \lfoot{}
 \cfoot{}
 \rfoot{}
 
 \begin{document}
-\maketitle
+\input{deckblatt}
 \newpage
-%
+
 \tableofcontents
 \newpage
 %
-\includepdf{stateofart/stateofart.pdf}
-\section{Ein Umlauttest}
-üöß\cite{javainsel2}
+\input{literaturrecherche}
 %
+\newpage
+\addcontentsline{toc}{section}{Sprachänderungen aus Java 7 - Stand der Technik}
+\includepdf{stateofart/stateofart.pdf}
+%
+\nocite{javainsel2}
 \bibliography{stateofart}
 \bibliographystyle{geralpha}
+
+\appendix
+\input{appendix}
 \end{document}
