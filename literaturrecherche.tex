@@ -9,6 +9,7 @@ Es wurden folgende Schritte unternommen um einen möglichst umfangreichen Überb
 \end{enumerate}
 In Tabelle [TODO REF] ist eine Übersicht über alle genutzen Ressourcen zu finden. Ab Seite \pageref{startdetails} werden die Ergebnisse und Erfahrungen mit diesen Ressourcen näher vorgestellt.
 
+%TODO Links auf die ganzen Seiten in der Tabelle
 \renewcommand{\arraystretch}{1.5}
 \begin{longtable}{p{3.6cm}|p{3.5cm}|l|p{3.5cm}}
 Resourcentyp & Resource & Datum & Suchergebnisse\\\hline\endhead
@@ -20,8 +21,12 @@ Literaturdatenbank & Search Data Backup & 27.02.2013 & viele Relevante Treffer, 
 Digital Library & IEEE xplore & 27.02.2012 & keine nutzbaren Dokumente\\
 Literaturdatenbank & FIZ Technik/ WFi Frankfurt & 27.02.2012 & keine nutzbaren Dokumente\\
 Literaturdatenbank/ Bibliothek & Milibib/ Oldenbourg Akademie Link & 27.02.2013 & 57 Ergebnisse, 1 Titel Ausgewählt\\
-Internetquelle & Google & 27.02.2013 & TODO\\
-Internetquelle & Wikipedia & 02.03.2013 & TODO\\
+Internetquelle & Google & 27.02.2013 & sehr viele Treffer, davon 5 ausgewählt (teilweise Duplikate zu anderen Quellen)\\
+Internetquelle & Wikipedia & 27.02.2013 & 5 Treffer (über Google gesucht)\\
+Literaturdatenbank & Elektronische Zeitschriftenbibliothek & 27.02.2013 & keine relevanten Ergebnisse\\
+Literaturdatenbank & SpringerLink & 27.02.2013 & mehr als 100.000 Treffer, davon 1 vielversprechend\\
+Literaturdatenbank & Books24x7 & 27.02.2013 & 2302 Treffer, 1 sehr relevant\\
+Videodatenbank & Video2Brain & 27.02.2013 & 17 Treffer, 1 sehr relevant\\
 \end{longtable}
 \renewcommand{\arraystretch}{1}
 
@@ -68,6 +73,66 @@ Für den Zugriff auf die Dokumente ist eine Registrierung\footnote{http://www.fi
 Eine Suche nach \glqq Java\grqq ~ergab 57 Titel\footnote{https://milibib.missing-link.de/}. Wir haben alle Titel gesichtet. Es bafanden sich vorwiegend Grundlagenbücher und allgemeine Werke zu Java darunter. Gezielt auf aktuelle Änderungen bezog sich keines der Bücher.\\
 
 Für uns interssant ist das Werk \glqq Java 6 Core Techniken - Essentielle Techniken für Java-Apps\grqq\cite{java6core} ~von Friedrich Esser. Das Buch kann aus dem DHBW-Netz über Oldenbourg Akademie Link als E-Book\footnote{http://www.oldenbourg-link.com/isbn/9783486584110} bezogen werden. Das Kapitel \glqq Java 6 Basics\grqq\cite{java6core} ~sellt die Sprachänderungen von Java SE Version 5 zu Version 6 vor.
+
+\subsection{Google}
+Wie erwartet, bringt die Suche bei Google riese Treffermengen. So lieferte eine Suche nach \glqq Java 7 Änderungen\grqq~
+1.440.000 Treffer, eine englische Suche nach \glqq Java 7 new features\grqq~gar 82.300.000 Ergebnisse. Da die Relevanz bei
+Google sehr gut eingeschätzt wird, waren unter den ersten Suchergebnissen bei beiden Suchen sehr vielversprechende Artikel
+und Bücher.\\
+
+Eine gute Betrachtung aller kleinen Änderungen sowie den neuen Performance-Verbesserungen bietet der Artikel
+\glqq Was ist neu in Java 7\grqq\cite{heiseWasistNeu}~auf Heise Developer.
+Auch von Interesse ist der Artikel \glqq Java 7 Features\grqq\cite{blogJava7Features}~von Simon Koelsch, welcher sich nicht nur
+den Änderungen an der Sprache sondern zusätzlich den Erweiterungen an der Virtuellen Maschine widmet.
+Zusätzlich findet Google den Wikipedia-Artikel zu den verschiendenen Java-Versionen, worauf genauer in Kapitel TODO eingegangen wird.
+Des Weiteren findet man bei Google das Buch \glqq Java 7 - Mehr als eine Insel\grqq\cite{javainsel2}, welches wir bereits in der
+DHBW-Bibliothek gefunden hatten, sowie die Verlinkung zur Oracle Java 7 Homepage, die wir aber als eigene Quelle bereits
+identifiziert hatten (siehe Kapitel TODO).
+
+\subsection{Wikipedia}
+Die Suche auf Wikipedia, unterstützt durch Google mit dem Suchbegriff \glqq java 7 wikipedia\grqq (83.100.000 Ergebnisse) ergab
+fünf Artikel. Drei davon (\cite{wikiJavaSoftwarePlatform}, \cite{wikiJavaProgrammiersprache}, \cite{wikiJavaStandardEdition})
+sind Artikel generell zu Java, ohne speziell auf Java 7 einzugehen. In den Artikeln \glqq Java-Technologie\grqq\cite{wikiJavaTechnologie}
+~sowie \glqq Java version history\grqq\cite{wikiJavaVersionHistory}~wird zwar der Changelog von Java 7 aufgeführt, aber nicht
+weiter beschrieben. Damit sind diese Quellen für uns nahezu unbrauchbar. Lediglich ein Abgleich der Vollständigkeit mit anderen
+Artikeln ist uns damit möglich.
+
+\subsection{Elektronische Zeitschriftenbibliothek}
+Die Suche in der EZB brachte keine Resultate, bei den Suchbegriffen \glqq Java 7\grqq~sowie \glqq Java features\grqq~kamen
+jeweils keine Treffer heraus. Lediglich bei einer Suche ganz allgemein nach \glqq Java\grqq~gab es 13 Treffer. Von diesen waren
+nur zwei frei zugänglich, die aber keinerlei Relevanz für uns haben. Den Artikel \glqq State of the Art in Java Program Analysis
+(SOAP)\grqq~hätten wir gerne näher betrachtet, leider war dieser aber nicht zugänglich.
+
+\subsection{SpringerLink}
+Bei der Suche auf SpringerLink kamen bei \glqq Java 7\grqq~72.242 Treffer heraus. Das zweite Ergebnis, das Buch \glqq Pro Java 7
+NIO.2\grqq\cite{proJava7}~von Anghel Leonard aus dem Jahre 2011 sieht sehr vielversprechend aus, weil das Inhaltsverzeichnis
+\footnote{\url{http://link.springer.com/book/10.1007/978-1-4302-4012-9/page/1}} (sowie der Titel) zeigt, dass es um viele der neuen
+I/O-Funktionen von Java 7 geht.
+Die anderen Treffer innerhalb der ersten 100 waren für uns nicht relevant.\\
+
+Eine Suche mit dem Begriff \glqq Java 7 new features\grqq brachte 41.783 Treffer, von denen gleich der erste, ein Vergleich zwischen
+Java und Ada sehr interessant zu sein schien. Leider stellte sich aber heraus, dass das Buch 
+(\glqq A Comparison of the Object-Oriented Features of Ada 2005 and Java\grqq\cite{adacomparison}) von 2008 ist 
+und damit auf jeden Fall keine aktuellen Konzepte zwischen den beiden Sprachen verglichen werden.
+Der Titel des Buches brachte uns auf die Suchabfrage \glqq Java 7 comparison\grqq, um etwaige aktuellere Vergleiche zwischen
+Java und anderen Sprachen zu finden. Leider war bei den 29.802 Ergebnissen, bis auf das eben schon gefundene, keine Relevanten
+dabei.
+
+\subsection{Books24x7}
+Books24x7 ist ein kostenpflichtiges Online-Angebot, wo man nicht nur suchen, sondern die Bücher auch direkt elektronisch lesen
+kann. Jeder IBM Mitarbeiter hat dort einen, durch IBM finanzierten, Account.\\
+
+Die Suche nach \glqq Java 7\grqq~brachte 2302 Ergebnisse. Dort waren gute Java-Bücher dabei, jedoch nur eines, welches sich direkt
+mit Neuerungen aus Java 7 beschäftigt und zwar das schon im SpringerLink gefundene \glqq Pro Java 7 NIO.2\grqq\cite{proJava7}. Der
+riesige Vorteil daran, es hier zu finden, ist, dass wir es direkt online benutzen können. 
+
+\subsection{Video2Brain}
+Bei der Suche auf Video2Brain nach \glqq Java 7\grqq~(17 Treffer) stach direkt das Video-Tutorial \glqq Neu in Java 7\grqq\cite{v2bJava7}~
+ins Auge, welches die wichtigstens Neuerungen von Java 7 kurz anhand von Code-Beispielen vorstellt.
+Die anderen Ergebnisse waren nicht relevant.
 %
 %eof
+
+
+
 
