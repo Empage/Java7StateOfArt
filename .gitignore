@@ -1,7 +1,8 @@
 .project
 .texlipse
-*.pdf
 .settings
+document.pdf
+stateofart/stateofart.pdf
 
 *.acn
 *.acr
