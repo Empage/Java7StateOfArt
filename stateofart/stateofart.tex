@@ -175,14 +175,56 @@ werden alle an den Anwender hochgereicht. Wie das genau gemacht wird, wird in Ka
 
 \Section{Literals}
 \SubSection{Binary Literals}
+
+Während in der bisherigen Javaversion 6 Zahlenliterale nur in oktaler, dezimaler und hexadezimaler angabeform möglich waren, erlaubt java 7 nun auch Binäre literale. Binäre Literale können mit dem Präfix \texttt{0b} geschrieben werden.
+
+Insbesondere bei der Angabe negativer Zahlen ist jedoch Vorsicht geboten. Für die Datentypen \texttt{byte} und \texttt{short} kann das erste Bit nicht direkt angegeben werden. Es sind also nur 7 bzw. 15 statt 8 und 16 Bit lange Angaben möglich. Die Angabe ob es sich um eine Negative Zahl handelt erfolgt hier durch ein Minuszeichen. Zu beachten ist jedoch, dass der Wert der Binärzahl dadurch negativ dargestellt wird. Dies ist nicht Äquivalent mit einer Invertierung des Vorzeichenbits, was Zeilen 1-3 des folgenden Beispiels verdeutlichen.\cite{sbJ7literals}
+\begin{lstlisting}[language=java,breaklines=true]
+  byte zahl1 =  0b1111111  // 127
+  byte zahl2 = -0b1111111  //-127
+  byte zahl3 = -0b10000000 //-128
+  byte zahl4 =  0b01111111 // 127
+  byte zahl5 =  0b10000000 //ERROR
+\end{lstlisting}
+Auffallend ist nun noch dass führende Nullen ignoriert werden (Zeile 4), wenn hingegen ein gleich langes Literal den Wertebereich des Datentyps überschreitet führt dies zu einem Compilererror (Can not convert from int to byte)\cite{sbJ7literals}.\\
+
+Beim Datentyp \texttt{int} gelten inkonsistenter Weise andere Regeln. Werden bei einem \texttt{int} die vollen 32 Bit angegen, wird das linkeste Bit als Vorzeichenbit interpretiert. Es kommt nicht zu einem Compilererror. Die zusätzliche Angabe den Minus Vorzeichens führt jedoch auch hier zu einer direkten Negativdastellung des Zahlenwerts und nicht zur Invertierung der des Vorzeichenbits. Erst ab dem 33 Bit kommt es zu einem Compilererror (out of range).
+\begin{lstlisting}[language=java,breaklines=true]
+int i=
+ 0b1000000000000000_0000000000000000;
+ //-2147483648
+int j=
+ -0b1000000000000000_0000000000000000;
+ //-2147483648
+int k=
+ 0b1010101010101010_1010101010101010;
+ //-1431655766
+int l=
+ -0b1010101010101010_1010101010101010;
+ // 1431655766
+int m=
+ 0b0010101010101010_1010101010101010;
+ // 715827882
+int n=
+ -0b0010101010101010_1010101010101010;
+ //-715827882
+\end{lstlisting}
+
+Verwunderlich ist hier zunächst das zweite Beispiel. Trotz des zusätzlichen Vorzeichens ist das Erbegnis identisch. Das Vorzeichen negiert den Zahlenwert. Erwarten würden wir also das Ergebnis \texttt{2147483648}. Da dies jedoch außerhalb des Wertebereichs von \texttt{int} liegt kommt ein Overflow um \texttt{1} hinzu. Ergebnis ist somit wieder \texttt{-2147483648}.
+
 \SubSection{Underscores in Numeric Literals}
+JONAS - S.42 J7 Buch fail
 
 \Section{Strings in switch Statements}
+MATTHIS
 
 \Section{Generic in Varargs}
+JONAS
 
 \Section{Exceptions}
 \SubSection{Catch Multiple Exceptions at once}
+MATTHIS
+
 \SubSection{Suppressed Exceptions}\label{supp_exception_subsec}
 Suppressed Exceptions wurden eingeführt, um das, in Java 7, neu auftretende Problem von \texttt{try-with-resources} zu adressieren.
 Mit dem neuen Konstrukt ist es nämlich möglich, dass zwei Exceptions gleichzeitig auftreten können (siehe Kapitel \ref{try_sec}), wenn im
@@ -219,8 +261,10 @@ Es ist zu erkennen, dass die Hauptexception eine \texttt{NullPointerException} i
 \texttt{UnsupportedOperationException} angefügt wurde (Zeile 3).
 
 \Section{NIO.2}
+MATTHIS
 
 \Section{ForkJoin-Framework}
+JONAS
 
 \Section{Conclusion}
 
