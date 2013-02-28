@@ -101,6 +101,77 @@ Auch die Verwendung in Verbindung mit dem Wildcardoperator wurde ermöglicht.
 Es wird hier bei der Initialisierung immer auf die Höchste mögliche Klasse zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
 
 \Section{try-with-resources}
+Neu mit Java 7 ist \texttt{try-with-resources}, was die normale try-catch-finally Routine erweitert,
+um die beiden folgenden Probleme zu adressieren:\cite{javainsel2}
+\begin{enumerate}
+\item Das Schließen einer Ressource benötigt oft ein zusätzliches try-catch
+\item Eine Ausnahme im finally-Block überdeckt eine etwaige Ausnahme aus dem try-Block
+\end{enumerate}
+
+Mit Ressourcen sind hier alle Klassen gemeint, die die neue Schnittstelle \jd{AutoClosable} implementieren, wie beispielsweise
+InputBuffer- und OutputBuffer-Klassen, aber auch die JDBC-Klassen \jd{Connection}, \jd{Statement} und \jd{ResultSet}.
+
+Um \texttt{try-with-resources} nutzen zu können, wird die Syntax des \texttt{try}s um einen Anweisungsblock in runden Klammern erweitert,
+in dem nun alle, am Ende zu schließenden, Ressourcen initialisiert werden. Das folgende Beispiel illustriert den Unterschied zwischen der
+klassischen Variante des manuellen Schließens der geöffneten Ressourcen sowie der neuen Variante mit \texttt{try-with-resources}:
+
+\begin{lstlisting}[language=java,breaklines=true]
+Connection con = null;
+Statement stmt = null;
+ResultSet rs = null;
+
+try {
+  con = DriverManager.getConnection(
+	"jdbc:hsqldb:file:/tmp/hsql;shutdown=true", "root", "");
+  stmt = con.createStatement();
+  rs = stmt.executeQuery("SELECT * FROM Customer");
+  while (rs.next()) {
+	System.out.printf("%s, %s%n", rs.getString(1), rs.getString(2));
+  }
+} catch (SQLException e) {
+  e.printStackTrace();
+} finally {
+  try {
+	if (rs != null) rs.close();
+  } catch (SQLException e) {
+	e.printStackTrace();
+  } finally {
+	try {
+	  if (stmt != null)	stmt.close();
+	} catch (SQLException e) {
+	  e.printStackTrace();
+	} finally {
+	  try {
+		if (con != null) con.close();
+	  } catch (SQLException e) {
+		e.printStackTrace();
+} } } }
+\end{lstlisting}
+
+Es ist zu erkennen, dass, um alle drei Ressourcen sicher schließen zu können, drei ineinander verschachtelte try-catch-finally Blöcke
+gebraucht werden. Ein weiterer Nachteil dieser Lösung ist das Verschlucken einer Exception, wenn gleichzeitig in Zeile 2 sowie in einer
+der \texttt{close()}-Methoden eine Exception geworfen wird. Dann überdeckt die Exception der \texttt{close()}-Anweisung die andere und der
+Anwender bekommt sie niemals zu Gesicht.\cite{javainsel2}
+
+\begin{lstlisting}[language=java,breaklines=true]
+try (
+  Connection con = DriverManager.getConnection(
+	"jdbc:hsqldb:file:/tmp/hsql;shutdown=true", "root", ""
+  );
+  Statement stmt = con.createStatement();
+  ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
+) {
+  while (rs.next()) {
+	System.out.printf("%s, %s%n", rs.getString(1), rs.getString(2));
+  }
+} catch (SQLException e) {
+  e.printStackTrace();
+}
+\end{lstlisting}
+
+Bei \texttt{try-with-resources} kann man alle Ressourcen (die \jd{AutoClosable} implementieren) mit Semikola getrennt 
+nach dem \texttt{try} auflisten. Damit werden sie automatisch am Ende des Blocks geschlossen und falls mehrere Exceptions auftreten,
+werden alle an den Anwender hochgereicht. Wie das genau gemacht wird, wird in Kapitel \ref{supp_exception_subsec} erläutert. 
 
 \Section{Literals}
 \SubSection{Binary Literals}
@@ -154,7 +225,7 @@ JONAS
 \SubSection{Catch Multiple Exceptions at once}
 MATTHIS
 
-\SubSection{Suppressed Exceptions}
+\SubSection{Suppressed Exceptions}\label{supp_exception_subsec}
 
 \Section{NIO.2}
 MATTHIS
