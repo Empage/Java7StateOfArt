@@ -100,7 +100,7 @@ Auch die Verwendung in Verbindung mit dem Wildcardoperator wurde ermöglicht.
 \end{lstlisting}
 Es wird hier bei der Initialisierung immer auf die Höchste mögliche Klasse zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
 
-\Section{try-with-resources}
+\Section{try-with-resources}\label{try_sec}
 Neu mit Java 7 ist das Automatic Resource Management, oft auch \texttt{try-with-resources} genannt, was die normale try-catch-finally 
 Routine erweitert, um die beiden folgenden Probleme zu adressieren:\cite{javainsel2}
 \begin{enumerate}
@@ -184,6 +184,39 @@ werden alle an den Anwender hochgereicht. Wie das genau gemacht wird, wird in Ka
 \Section{Exceptions}
 \SubSection{Catch Multiple Exceptions at once}
 \SubSection{Suppressed Exceptions}\label{supp_exception_subsec}
+Suppressed Exceptions wurden eingeführt, um das, in Java 7, neu auftretende Problem von \texttt{try-with-resources} zu adressieren.
+Mit dem neuen Konstrukt ist es nämlich möglich, dass zwei Exceptions gleichzeitig auftreten können (siehe Kapitel \ref{try_sec}), wenn im
+\texttt{try}-Block sowie in der automatisch aufgerufenen \texttt{close()}-Methode jeweils eine Exception geworfen wird. Dies würde
+dazu führen, dass die Hauptexception unterdrückt würde und der Anwender lediglich die Exception vom \texttt{close()} bekommen würde.
+
+Suppressed Exceptions bieten nun die Möglichkeit, eine Exception an eine andere heranzuhängen, um so beide an den Anwender zu
+kommunizieren. Dafür wurde die Klasse \jd{Throwable} um die beiden Methoden 
+\begin{lstlisting}[language=java,breaklines=true]
+public final void addSuppressed(Throwable exception)
+\end{lstlisting}
+und 
+\begin{lstlisting}[language=java,breaklines=true]
+public final Throwable[] getSuppressed()
+\end{lstlisting}
+erweitert, um die Exceptions anzuhängen und wieder abgreifen zu können. 
+Bei \texttt{try-with-resources} braucht sich der Programmierer um das Schachteln nicht zu kümmern, dies wird 
+automatisch vom Compiler erledigt.\cite{sbJ7coin} Lediglich bei der Abarbeitung der Exceptions kann er nun über
+alle Exceptions iterieren und entsprechenden Code ausführen lassen. Bei Verwendungen der Methode
+\begin{lstlisting}[language=java,breaklines=true]
+public void printStackTrace()
+\end{lstlisting}
+aus der Klasse \jd{Throwable} werden automatisch alle unterdrückten Exceptions mit angegeben. Eine Beispielausgabe dazu könnte
+folgendermaßen aussehen\cite{javainsel2}:
+\begin{lstlisting}[language=java,breaklines=true]
+Exception in thread "main" java.lang.NullPointerException
+  at SuppressedClosed.main(SuppressedClosed.java:14)
+  Suppressed: java.lang.UnsupportedOperationException: close() mag ich nicht
+    at SuppressedClosed$1NotClosable.close(SuppressedClosed.java:9)
+    at SuppressedClosed.main(SuppressedClosed.java:15)
+\end{lstlisting}
+
+Es ist zu erkennen, dass die Hauptexception eine \texttt{NullPointerException} ist und eine unterdrückte 
+\texttt{UnsupportedOperationException} angefügt wurde (Zeile 3).
 
 \Section{NIO.2}
 
