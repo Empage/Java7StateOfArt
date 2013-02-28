@@ -1,0 +1,76 @@
+\newarray\jDocArray
+
+\readarray{jDocArray}{%
+Name & das.package.Ksasse & http://linkzujavadoc.de/path/path.html &%
+Name & das.package.Ksasse & http://linkzujavadoc.de/path/path.html &%
+END&X&X%
+}
+\dataheight=3
+
+\newcommand{\jDocArrayValueCache}[2]{\checkjDocArray(#1,#2)\trimspace\cachedata}
+\newcommand{\jDocArrayValue}[2]{\jDocArrayValueCache{#1}{#2} \cachedata}
+
+\newcounter{jDocI}
+\setcounter{jDocI}{1}
+
+\jDocArrayValueCache{1}{1}
+\whiledo{\not\equal{\cachedata}{END}}
+{%
+	\newboolean{jDoc\thejDocI} %Deklaration
+	\setboolean{jDoc\thejDocI}{true} %Zuweisung
+	\stepcounter{jDocI}%
+	\jDocArrayValueCache{\thejDocI}{1}
+}
+
+\newcommand{\jd}[1]{%
+	\setcounter{jDocI}{1}%
+	\jDocArrayValueCache{1}{1}%
+	\whiledo{\not\equal{\cachedata}{#1} \and \not\equal{\cachedata}{END}}%
+	{%
+		\stepcounter{jDocI}%
+		\jDocArrayValueCache{\thejDocI}{1}%
+	}%
+	\ifthenelse{\equal{\cachedata}{END}}%
+	{%
+		\textbf{ERROR: could not find #1 in jDoc}%
+	}%
+	{%
+		\ifthenelse{\boolean{jDoc\thejDocI}}%
+		{%
+			#1$_{java}$\footnote{\jDocArrayValue{\thejDocI}{2}\newline\tiny\jDocArrayValue{\thejDocI}{3}}%
+			\setboolean{jDoc\thejDocI}{false}%
+		}%
+		{%
+			#1$_{java}$%
+		}%
+	}%
+}
+
+\newcommand{\jDocIndex}{%
+	%\begin{tabular}[h]{p{4cm}p{11.5cm}ll}%	
+	\setcounter{jDocI}{1}%
+	\jDocArrayValueCache{1}{1}%
+	\whiledo{\not\equal{\cachedata}{END}}%
+	{%
+		\ifthenelse{\not\boolean{jDoc\thejDocI}}%
+		{
+			%Eintrag erstellen
+			\begin{description}
+				\item[\jDocArrayValue{\thejDocI}{1}]\jDocArrayValue{\thejDocI}{2} \linebreak
+				\tiny\jDocArrayValue{\thejDocI}{3}
+			\end{description}						
+			%\jDocArrayValue{\thejDocI}{1} & \jDocArrayValue{\thejDocI}{2} \linebreak%
+			%\tiny\jDocArrayValue{\thejDocI}{3} \\%
+		}%
+		{%
+			%kein Eintrag erstellen
+		}%
+		\stepcounter{jDocI}%
+		\jDocArrayValueCache{\thejDocI}{1}%
+	}%
+	%\end{tabular}%
+}
+
+%\jd{Test} \jd{Test} \jd{InputFormat}
+
+%\jDocIndex

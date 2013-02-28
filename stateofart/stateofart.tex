@@ -13,6 +13,17 @@
 \usepackage[german]{babel}
 \usepackage[utf8]{inputenc}
 
+%for jDoc (begin)
+\usepackage{ifthen}
+\usepackage{arrayjob}
+\makeatletter
+\usepackage{trimspaces}
+\usepackage{titlesec}
+\def\trimspace#1{\trim@spaces@in{#1}}
+\makeatother
+\input{jDoc}
+%for jDoc (end)
+
 %------------------------------------------------------------------------- 
 % take the % away on next line to produce the final camera-ready version 
 \pagestyle{empty}
@@ -93,6 +104,8 @@ the originals provided. Do NOT use tape on your pages!
 %------------------------------------------------------------------------- 
 \bibliographystyle{latex8}
 \bibliography{../stateofart}
+
+\jDocIndex
 
 \end{document}
 
