@@ -12,6 +12,10 @@
 \usepackage{times}
 \usepackage[german]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{breakurl}
+\usepackage{color}
 
 %for jDoc (begin)
 \usepackage{ifthen}
@@ -23,6 +27,28 @@
 \makeatother
 \input{jDoc}
 %for jDoc (end)
+
+%Format Listings
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+\lstset{language=Java,
+basicstyle=\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{/**}{*/},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=1,
+numbersep=10pt,
+tabsize=4,
+showspaces=false,
+showstringspaces=false,
+frame=single}
+
 
 %------------------------------------------------------------------------- 
 % take the % away on next line to produce the final camera-ready version 
@@ -54,6 +80,25 @@ TODO
 \Section{Introduction}
 
 \Section{Diamond Operator}
+Mit Java 5 wurden Generics in die Sprache eingeführt, die sich schnell großer Beliebtheit erfreut haben und von der Entwicklergemeinde sehr gut angenommen wurden. Nun mit Java 7 hat Oracle die Deklaration von Variablen mit Generics deutlich vereinfacht\cite{oracleJavaRel}.\\
+
+Noch in Java 6 musste der Typ in Generics einer Deklaration mehrfach angegeben werden.
+\begin{lstlisting}[language=java,breaklines=true]
+  List<Integer> name = new ArrayList<Integer>();
+  Map<Integer,List<String>> name2 = new Map<Integer,List<String>>();
+\end{lstlisting}
+Java 7 unterstützt nun das automatische Rückschließen auf den deklarieren Datentyp bei der initialisierung.\cite{v2bJava7} Statt der erneuten Angabe des Typs kann hier nun der Diamantoperator verwendet werden.
+\begin{lstlisting}[language=java,breaklines=true]
+  List<Integer> = new ArrayList<>();
+  Map<Integer,List<String>> name2 = new Map<>();
+\end{lstlisting}
+Insbesondere bei verschachtelten Deklarationen ist dieses Feature in Verbindung mit der Autovervollständigung einer IDE sehr nützlich. Der Diamantoperator kann auch verwendet werden, wenn Initialisierung und Deklaration nicht in der selben Codezeile erfolgen.\cite{v2bJava7}\\
+
+Auch die Verwendung in Verbindung mit dem Wildcardoperator wurde ermöglicht.
+\begin{lstlisting}[language=java,breaklines=true]
+  List<? extends Number> = new ArrayList<>();
+\end{lstlisting}
+Es wird hier bei der Initialisierung immer auf die Höchste mögliche Klasse zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
 
 \Section{try-with-resources}
 
