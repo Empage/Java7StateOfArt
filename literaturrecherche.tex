@@ -10,11 +10,13 @@ Es wurden folgende Schritte unternommen um einen möglichst umfangreichen Überb
 In Tabelle [TODO REF] ist eine Übersicht über alle genutzen Ressourcen zu finden. Ab Seite \pageref{startdetails} werden die Ergebnisse und Erfahrungen mit diesen Ressourcen näher vorgestellt.
 
 %TODO Links auf die ganzen Seiten in der Tabelle
+%TODO anti blocksatz in ressource und tabelle breiter
 \renewcommand{\arraystretch}{1.5}
 \begin{longtable}{p{3.6cm}|p{3.5cm}|l|p{3.5cm}}
 Resourcentyp & Resource & Datum & Suchergebnisse\\\hline\endhead
 \endfoot\endlastfoot
 Literaturdatenbank/ Bibliothek & DHBW Bibliothek & 26.02.2013 & 5 nutzbare Ergebnisse\\
+Offizielle Dokumentation & Oracle & 28.02.2013 & verschiedene (siehe Abschnitt \ref{oracle})\\
 Patentdatenbank & Deutsches Patent- und Markenamt & 26.02.2013 & 2476x Java (Titel), 0x Java 7 (Titel), 3521x Java 7 (Volltext), keine nutzbaren Ergebnisse\\
 Literaturdatenbank & Association for Computing Machinery & 27.02.2013 & 45637 Treffer, davon 1 vielversprechend.\\
 Literaturdatenbank & Search Data Backup & 27.02.2013 & viele Relevante Treffer, davon 6 ausgewählt.\\
@@ -28,8 +30,6 @@ Literaturdatenbank & SpringerLink & 27.02.2013 & mehr als 100.000 Treffer, davon
 Literaturdatenbank & Books24x7 & 27.02.2013 & 2302 Treffer, 1 sehr relevant\\
 Videodatenbank & Video2Brain & 27.02.2013 & 17 Treffer, 1 sehr relevant\\
 Literaturdatenbank/ Bibliothek & Books 24x7 (IBM Zugang) & 27.02.2012 & 2302 Ergebnisse (manuell kategorisiert), davon 1 ausgewählt\\
-Internetquelle & Google & 27.02.2013 & TODO\\
-Internetquelle & Wikipedia & 02.03.2013 & TODO\\
 \end{longtable}
 \renewcommand{\arraystretch}{1}
 
@@ -45,7 +45,26 @@ Wir haben alle gelisteten Bücher zu Java 7 vor Ort in der Bibliothek gesichtet.
 
 Das Buch \glqq Java 7 - Mehr als eine Insel\grqq\cite{javainsel2} ~beschreibt in einem eigenen Kapitel die Neuerungen in Java 7. Der Autor, Christian Ullenboom, ist uns bereits durch seine frühere Veröffentlichung \glqq Java ist auch eine Insel\grqq\cite{javainsel1} ~bekannt gewesen, die mittlerweile als Referenzwerk für die Java SE Bibliotheken gehandelt wird. Die aktuelle Ausgabe dieses Buchs basiert ebenfalls auf Java 7 und kann im \glqq Stand der Technik\grqq ~Dokument verwendet werden.
 
+\subsection{Offizielle Oracle-Ressourcen}\label{oracle}
+Oracle stellt die Sprachänderungen an Java 7 unter anderem durch die Release
+Notes\footnote{\url{http://www.oracle.com/technetwork/java/javase/jdk7-relnotes-418459.html}} mit dem Titel 
+\glqq Java SE 7 Features and Enhancements\grqq\cite{oracleJavaRel}~vor. Darüber hinaus sind alle API-Funktionen in den 
+Java-Docs\footnote{\url{http://docs.oracle.com/javase/7/docs/api/}}\cite{javadocs} dokumentiert.\\
+
+Auch das Zertifizierungsprogramm der Oracle University\footnote{\url{education.oracle.com}} wurde auf die Sprachänderungen in Java 7 angepasst.
+Die neuen Prüfungen 1Z0-803\footnote{\url{http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-803}}, 
+1Z0-804\footnote{\url{http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-804}} und 
+1Z0-805\footnote{\url{http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-805}} 
+erlauben die Zertifizierung zu Oracle Cetified Professional Java Programmer bzw. Associate.
+Durch die neuen Zertifizierungen wird auch Lehrmaterial\footnote{\url{http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=640}}, 
+bezogen auf die Sprachänderungen, bereit gestellt.\\
+
+Bereits zu Java 6 erstellte, damals noch Sun, ein Lehrbuch\cite{scjp6} zur Zertifizierung. Die selben Autoren haben eine aktualisierte 
+Version des Werks\cite{scjp7} für den 21.06.2013 angekündigt. Bisher ist bereits das Buch 
+\glqq Oracle Certified Professional Java SE 7 Programmer Exams 1Z0-804 and 1Z0-805\grqq\cite{apressjava}~zur Vorbereitung erschienen.
+
 \subsection{DPMA - Deutsches Patent- und Markenamt}
+
 Wir haben die Einsteigersuche\footnote{http://depatisnet.dpma.de/DepatisNet/depatisnet?action=einsteiger} des DPMA verwendet um Patente mit Bezug zum Thema Java 7 zu finden. Eine Suche im Titel ergab hierbei für \glqq Java 7\grqq ~keinen Treffer und für \glqq Java \grqq ~2476 Treffer. In der Volltextsuche wurden für \glqq Java 7\grqq ~3521 Ergebnisse gefunden.\\
 
 Um aktuelle Neuerungen zu finden wurde zusätzlich die Sortierung nach Veröffentlichungsdatum genutzt. Bei unserer Recherche war es in der Menge der Ergebnisse nicht möglich auch nur einen Eintrag aufzufinden, der sich auf Neuerungen in der Sprache bezieht. Alle betrachteten Einträge verwenden lediglich Java. Dar Java SE 7 an sich als Open Source verfügbar ist, ist es generell unwahrscheinlich das Patente auf offizielle Sprachänderungen an Java bestehen.\\
