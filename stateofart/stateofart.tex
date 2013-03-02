@@ -210,10 +210,22 @@ int n=
  //-715827882
 \end{lstlisting}
 
-Verwunderlich ist hier zunächst das zweite Beispiel. Trotz des zusätzlichen Vorzeichens ist das Erbegnis identisch. Das Vorzeichen negiert den Zahlenwert. Erwarten würden wir also das Ergebnis \texttt{2147483648}. Da dies jedoch außerhalb des Wertebereichs von \texttt{int} liegt kommt ein Overflow um \texttt{1} hinzu. Ergebnis ist somit wieder \texttt{-2147483648}.
+Verwunderlich ist hier zunächst das zweite Beispiel. Trotz des zusätzlichen Vorzeichens ist das Erbegnis identisch. Das Vorzeichen negiert den Zahlenwert. Erwarten würden wir also das Ergebnis \texttt{2147483648}. Da dies jedoch außerhalb des Wertebereichs von \texttt{int} liegt kommt ein Overflow um \texttt{1} hinzu. Ergebnis ist somit wieder \texttt{-2147483648}.\\
+
+Literale des Datentyps \texttt{long} werden wie gewohnt mit einem \texttt{L} oder \texttt{l} am Ende des Literals kenntlich gemacht (z.B. \texttt{0b1010L}). Gleitkommazahlen können \textbf{nicht} als binäre Literale angegeben werden. Die Endungen \texttt{D}, \texttt{d}, \texttt{F} und \texttt{f} führen folglich zu einem Compiler Error.
 
 \SubSection{Underscores in Numeric Literals}
-JONAS - S.42 J7 Buch fail
+Zur Verbesserung der Übersichtlichkeit ermöglich Java 7 die Notation von Unterstrichen in Zahlenliteralen. Unterstriche sind nur an Position zwischen zwei Ziffern zulässig, also nicht am Anfang oder Ende des Literals, nicht vor oder nach Datentypangaben oder Literaltypangaben und nicht Angrenzend an das Dezimaltrennzeichen (\texttt{.}).\cite{apressjava} An den zulässigen Positionen können beliebig viele Unterstriche aufeinander folgen.\cite{heiseWasistNeu}
+
+\begin{lstlisting}[language=java,breaklines=true]
+int   i=0b_001;  //invalid
+int   j=123_L;   //invalid
+int   k=_123;    //invalid
+int   l=123_;    //invalid
+float m=12._34;  //invalid
+int   n=1____2;  //valid
+float o=1_2.3_4; //valid
+\end{lstlisting}
 
 \Section{Strings in switch Statements}
 MATTHIS
@@ -224,6 +236,40 @@ JONAS
 \Section{Exceptions}
 \SubSection{Catch Multiple Exceptions at once}
 MATTHIS
+
+->REMINDER: EXCEPTION IST VOM SPEZIELLST MÖGLICHEN TYP.
+\SubSection{Rethrow Exceptions}
+Dieses Feature adressiert den Wunsch der Entwicklergemeinde weniger unnötigen und redundanten Java Code schreiben zu müssen.\cite{sbJ7exeptions}\\
+
+Häufig kommt es vor, dass eine Exception in einem \texttt{try} Block auftritt, dann in einem \texttt{catch} Block abgefangen und bearbeitet wird und schließlich dennoch durch einen erneuten \texttt{throw} Befehl an die aufrufende Methode hochgereicht wird.
+
+\begin{lstlisting}[language=java,breaklines=true]
+public static void main(String args[]) throws Exception {
+    boolean flag = true;
+    try {
+        if (flag){
+            throw new OpenException();
+        }
+        else {
+            throw new CloseException();
+        }
+    }
+    catch (Exception e) {
+        System.out.println(e.getMessage());
+        throw e;
+    }
+}
+\end{lstlisting}
+
+Obiger Code\cite{sbJ7exeptions} zeigt eine Möglichkeit dies mit Java 6 zu realisieren. Es wird im \texttt{catch} Block die allgemeine \jd{Exception} Klasse statt der tatsächlichen erbenden \texttt{Open}- bzw. \texttt{CloseException} abgefangen. Hierdurch kommt es jedoch auch zu einer Verallgemeinerung der \texttt{throws} Deklaration der Methode auf \jd{Exception} und die detailliertere Typisierung geht beim rethrow verloren. Dieses Problem konnte noch in Java 6 nur umgangen werden in dem getrennte \texttt{catch} Blöcke mit redundantem Code für jede Exception verwendet wurden. Alternativ musste der Code zum Exceptionhandling in eine externe Methode ausgelagert werden, die dann in getrennten \texttt{catch} Blöcken aufgerufen wurde.\cite{scjp6}\\
+
+In Java 7 erkennt der Compiler nun, welche checked Exceptions tatsächlich im \texttt{try} Block geworfen werden können. Ebenso erkennt der Compiler wenn es sich um einen rethrow einer Exception hadelt. Mit Java 7 kann dadurch der Methodenkopf im obigen Beispiel mit expliziten Exceptions angegeben werden ohne, dass es zu einem Copiler Error kommt\cite{sbJ7exeptions}.
+
+\begin{lstlisting}[language=java,breaklines=true]
+public static void main(String args[]) throws OpenException, CloseException
+\end{lstlisting}
+
+Dieses Feature kann problemlos in Kombination mit dem Multicatch Feature verwendet werden.
 
 \SubSection{Suppressed Exceptions}\label{supp_exception_subsec}
 Suppressed Exceptions wurden eingeführt, um das, in Java 7, neu auftretende Problem von \texttt{try-with-resources} zu adressieren.
