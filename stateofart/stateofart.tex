@@ -228,7 +228,22 @@ float o=1_2.3_4; //valid
 \end{lstlisting}
 
 \Section{Strings in switch Statements}
-MATTHIS
+Eine weitere Neuering aus Java 7 ist die Möglichkeit, das \texttt{switch} Statement auch mit Strings zu verwenden, statt wie
+zuvor nur mit Ganzzahldatentypen kompatibel zu \texttt{Integer} (char, byte, short, int). Dabei kann nun direkt ein String
+angegeben werden, oder auf eine zur Compile-Zeit bekannte Konstante zurückgegriffen werden. Nicht möglich ist die Verwendung
+von Regexen oder der Abfrage auf \texttt{null}.\cite{javainsel2}
+
+\begin{lstlisting}[language=java,breaklines=true]
+String str1 = "TWA";
+final String STR2 = "DB";
+
+switch (str1) {
+case "CTV": //valid
+case STR2:  //valid
+case null:  //Compiler-Error
+case 42:	//Compiler-Error
+}
+\end{lstlisting}
 
 \Section{Varargs mit Generics}
 Um die in diesem Abschnitt vorgestelleten Verbesserungen verstehen zu können ist zunächst die Feststellung von Bedeutung, dass Java laut Sprachdefinition keine Arrays aus generischen Datentypen erlaubt.
