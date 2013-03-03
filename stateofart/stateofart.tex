@@ -12,6 +12,7 @@
 \usepackage{times}
 \usepackage[german]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{breakurl}
@@ -228,7 +229,7 @@ float o=1_2.3_4; //valid
 \end{lstlisting}
 
 \Section{Strings in switch Statements}
-Eine weitere Neuering aus Java 7 ist die Möglichkeit, das \texttt{switch} Statement auch mit Strings zu verwenden, statt wie
+Eine weitere Neuerung aus Java 7 ist die Möglichkeit, das \texttt{switch} Statement auch mit Strings zu verwenden, statt wie
 zuvor nur mit Ganzzahldatentypen kompatibel zu \texttt{Integer} (char, byte, short, int). Dabei kann nun direkt ein String
 angegeben werden, oder auf eine zur Compile-Zeit bekannte Konstante zurückgegriffen werden. Nicht möglich ist die Verwendung
 von Regexen oder der Abfrage auf \texttt{null}.\cite{javainsel2}
@@ -263,11 +264,51 @@ Der Java 7 Compiler unterstützt den Entwickler nun mit einer zusätzlichen Warn
 Um die Warnungen bei den Methodenaufrufen in Java 6 zu unterdrücken musste bei jedem Aufruf ein 
 %geschachteltes texttt, weil "u sonst zu ü wird. Known bug in german option.
 \texttt{@SuppressWarnings(}"\texttt{unchecked}"\texttt{)} eingefügt werden. In Java 7 erlaubt nun die neue Annotation \texttt{@SafeVarargs} dem Autor einer Methode das unterdrücken aller genannten Warnings aufeinmal. Die Annotation muss dafür nur bei der Deklaration angegeben werden und wirkt sich dann auch auf die Warnings bei Aufrufen der Methoden unterdrückend aus.
+
 \Section{Exceptions}
 \SubSection{Catch Multiple Exceptions at once}
-MATTHIS
+Desöfteren wirft ein Code Fragment mehrere Exceptions, die zwar unterschiedliche Ursachen haben, aber dennoch gleich behandelt
+werden sollen. Ein Szenario wäre die Klasse \jd{Scanner} zu verwenden, um eine Datei einzulesen. Dabei könnten eine 
+\texttt{IOException} beim fehlerhaften Öffnen der Datei sowie eine \texttt{InputMismatchException} beim Parsen auftreten.
 
-->REMINDER: EXCEPTION IST VOM SPEZIELLST MÖGLICHEN TYP.
+Angenommen, es sollen sehr viele Dateien geparsed und eine fehlerhafte Datei einfach übersprungen werden, 
+gleich welcher Fehler auftritt, könnten zwei \texttt{catch} Blöcke verwendet werden, die beide redundanten Code enthalten.
+\begin{lstlisting}[language=java,breaklines=true]
+try {/*...*/} 
+catch (InputMismatchException e) {
+	/* parse next file */}
+catch (IOException e) {
+	/* parse next file */}
+\end{lstlisting} 
+Dies sorgt natürlich für unnötige Code-Duplizierung, was zu Fehlern führen könnte, wenn das Verhalten nachträglich geändert 
+werden soll, dabei aber ein \texttt{catch} Block vergessen wird.
+
+Was deshalb gerne gemacht wird, ist die generelle \texttt{Exception} abzufangen.
+\begin{lstlisting}[language=java,breaklines=true]
+try {/*...*/} 
+catch (Exception e) {
+	/* parse next file */}
+\end{lstlisting}
+Ein Nachteil, der im ersten Moment gerne vergessen (oder bewusst ignoriert) wird, ist, dass dieser \texttt{catch} Block 
+\textbf{alle} Exceptions abfängt, eben auch \texttt{RuntimeException}s. Dies ist oft ein unterwünschtes Verhalten, da 
+beispielsweise \texttt{NullPointerException}s oft ein Indikator für fehlerhaften Code sind und dies nicht mehr auffälle,
+wenn nun einfach die Datei übersprungen und mit der nächsten fortgefahren würde.
+
+Die mit Java 7 eingeführte Lösung des Problems nennt sich \texttt{Multi-catch}. Dabei ist es möglich, mehrere Exceptions
+mit nur einem \texttt{catch} Block abzufangen. Dazu werden alle abzufangenen Exceptions mit einer Pipe (|) verbunden.\cite{javainsel2}
+\begin{lstlisting}[language=java,breaklines=true]
+try {/*...*/} 
+catch (InputMismatchException | IOException e) {
+	/* parse next file */}
+\end{lstlisting}
+Hierbei ist es wichtig zu erwähnen, dass \texttt{e} dadurch \texttt{final} wird, also seine Referenz im \texttt{catch} Block 
+nicht mehr verändert werden darf. Des Weiteren ist es auch nicht möglich, Exceptions aus dem selben Zweig hintereinander
+zu hängen. So ist es beispielsweise nicht möglich, \texttt{IOException} und \texttt{FileNotFoundException} zu kombinieren,
+weil letztere eine Subklasse von ersterer ist. Dies ist auch nicht möglich, wenn die \texttt{FileNotFoundException} zuerst
+genannt wird, wie es bei der klassischen Methodik vom Fangen mehrerer Exceptions der Fall ist.
+
+%TODO @Jonas: reminder für dich oder mich?
+%->REMINDER: EXCEPTION IST VOM SPEZIELLST MÖGLICHEN TYP.
 \SubSection{Rethrow Exceptions}
 Dieses Feature adressiert den Wunsch der Entwicklergemeinde weniger unnötigen und redundanten Java Code schreiben zu müssen.\cite{sbJ7exeptions}\\
 
