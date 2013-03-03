@@ -60,11 +60,13 @@ frame=single}
 \title{Java 7 - State of the Art}
 
 \author{Jonas Traub\\
+IBM Deutschland\\
 Duale Hochschule Baden-Württemberg\\
 Stuttgart, Deutschland\\
-jonastraub@gmail.com
+jonas.traub@de.ibm.com
 \and
 Matthis Hauschild\\
+IBM Deutschland\\
 Duale Hochschule Baden-Württemberg\\
 Stuttgart, Deutschland\\
 matthis.hauschild@gmail.com\\
@@ -230,9 +232,24 @@ float o=1_2.3_4; //valid
 \Section{Strings in switch Statements}
 MATTHIS
 
-\Section{Generic in Varargs}
-JONAS
+\Section{Varargs mit Generics}
+Um die in diesem Abschnitt vorgestelleten Verbesserungen verstehen zu können ist zunächst die Feststellung von Bedeutung, dass Java laut Sprachdefinition keine Arrays aus generischen Datentypen erlaubt.
+\begin{lstlisting}[language=java,breaklines=true]
+int i[]=new int[500]; //is valid, but
+//the following causes a compiler error
+List<String> j[]=new List<String>[500];
+\end{lstlisting}
+Es können jedoch durchaus generische Datentypen in Varargs verwendet werden. Der Methodenkopf \texttt{void myMethod(List<String>... x)} ist somit gültig. Die übergebenen Listen werden innerhalb der Methode als Array mit dem Namen \texttt{x} repräsentiert. Da ein Array aus \texttt{list<String>} jedoch nicht möglich ist erhalten wir nur ein Array vom Typ \texttt{List}. Die generische Typisierung geht also verloren.\\
 
+Die führt dazu, dass der Compiler nicht mehr überprüfen kann, ob die Elemente des Arrays aus dem Parameter \texttt{x} auch typsicher verwendet werden.\cite{v2bJava7}\\
+
+Der Java 6 Compiler liefert im beschriebenen Fall nur eine Warning beim Aufruf der Methode (\texttt{uses unchecked or unsave operations} bzw. \texttt{unchecked generic array creation}), nicht jedoch bei deren Deklaration. Es werden also nur die Nutzer und nicht der Autor einer Methode vor dem eventuellen Problem der Typunsicherheit gewarnt.\\
+
+Der Java 7 Compiler unterstützt den Entwickler nun mit einer zusätzlichen Warnung (\texttt{possible heap pollution}) die an der Postion der Methodendeklaration erzeugt wird.\\
+
+Um die Warnungen bei den Methodenaufrufen in Java 6 zu unterdrücken musste bei jedem Aufruf ein 
+%geschachteltes texttt, weil "u sonst zu ü wird. Known bug in german option.
+\texttt{@SuppressWarnings(}"\texttt{unchecked}"\texttt{)} eingefügt werden. In Java 7 erlaubt nun die neue Annotation \texttt{@SafeVarargs} dem Autor einer Methode das unterdrücken aller genannten Warnings aufeinmal. Die Annotation muss dafür nur bei der Deklaration angegeben werden und wirkt sich dann auch auf die Warnings bei Aufrufen der Methoden unterdrückend aus.
 \Section{Exceptions}
 \SubSection{Catch Multiple Exceptions at once}
 MATTHIS
