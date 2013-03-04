@@ -378,7 +378,139 @@ Es ist zu erkennen, dass die Hauptexception eine \texttt{NullPointerException} i
 \texttt{UnsupportedOperationException} angefügt wurde (Zeile 3).
 
 \Section{NIO.2}
-MATTHIS
+Mit Java 7 wurde das im Jahre 2002 mit Java 1.4 eingeführte NIO (new Input/Output) verbessert und in einer Version NIO.2
+herausgegeben.\cite{v2bJava7} NIO.2 umfasst viele Änderungen, wobei hier auf die wichtigsten bezüglich Dateien und
+Dateisystemen eingegangen wird.
+
+Alle vorgestellten Klassen sind im Package \texttt{java.nio} zu finden.
+
+\SubSection{Einfache Datei- und Pfadoperationen}
+Neu hinzugekommen ist die Klasse \jd{Path}, welche viele Methoden zum Erstellen und Modifieren von Dateisystempfaden enthält. Dabei ist
+wichtig zu erwähnen, dass die Klasse nicht wirklich auf dem Dateisystem arbeitet, sondern die Pfade nur repräsentiert. Zum tatsächlichen
+Modifizieren wird beispielsweise die Hilfsklasse \jd{Files} verwendet. Die Pfade sind über viele Methoden veränderbar und dies ist auf
+allen Betriebssystemen einheitlich. Trotzdem sind die Path-Objekte betriebssystemabhängig, da sie letztenendes Pfade 
+im Dateibaum darstellen.
+\begin{lstlisting}[language=java,breaklines=true]
+Path p1 = 
+  Paths.get("test/a", "aa/dok1.txt");
+Path p2 = Paths.get("test/b/");
+
+p2.relativize(p1); // ..\a\aa\dok1.txt
+p1.toAbsolutePath(); 
+// C:\Users\Matthis\test\a\aa\dok1.txt
+p2.getName(0); // test
+\end{lstlisting}
+Hier sind beispielhaft einige Methoden von \jd{Path} benutzt worden. Um einen Pfad zu erstellen, kann die 
+Methode \texttt{static Path get(String first, String... more)} aus der Hilfsklasse \jd{Paths} verwendet werden.
+
+\jd{Path} bietet Möglichkeiten, um einen Pfad von einem zu einem anderen zu bilden, einen absoluten Pfad zu erstellen,
+einzelne Teile aus einem Pfad zu extrahieren, das Elternelement zurückzugeben und viele mehr.
+
+Um nun tatsächlich Änderungen im Dateisystem durchführen zu können, kann die oben erwähnte Klasse \jd{Files} verwendet werden.
+Diese bietet Unterstützung für einfache Operationen wie Verschieben, Kopieren und Löschen, kann aber auch Dinge, die früher
+mit \jd{File} nur schwierig zu realisieren waren, wie Datei-Attribute verändern, symbolische und harte Links erstellen oder
+direkt einen geöffneten Stream auf eine Datei zurückgeben.\cite{b247nio2}
+\begin{lstlisting}[language=java,breaklines=true]
+Path p1 = 
+ Paths.get("test/a", "aa/dok1.txt");
+Path p2 = 
+ Paths.get("test/b/kopierteDatei.txt");
+
+Files.isRegularFile(p1); //true
+Files.getLastModifiedTime(p1); 
+//2013-03-04T15:25:52.53087Z
+Files.copy(p1, p2); 
+//erzeugt neue Datei kopierteDatei.txt
+Files.createSymbolicLink(
+  Paths.get("test/link.lnk"), p1);
+
+try (BufferedReader in = 
+  Files.newBufferedReader(p1, Charset.defaultCharset())) {
+	System.out.println(in.readLine());
+}
+\end{lstlisting}
+Wie man sehen kann, sind die neuen Methoden sehr einfach zu benutzen und erleichtern das Handling mit Dateien besonders,
+wenn eine Applikation für verschiedene Betriebssysteme geschrieben wurde.
+
+\SubSection{Verzeichnis-Operationen}
+Ein weiteres Konzept ist der \jd{FileVisitor}. Oft möchte man durch einen Verzeichnisbaum iterieren und auf jede Datei eine
+Operation durchführen.
+Der Methode \texttt{static Path walkFileTree(Path start, FileVisitor<? super Path> visitor)} aus \jd{Files} kann man einen
+FileVisitor mitgeben. Sie iteriert dann rekursiv über den angegebenen Pfad und wendet die Operationen des FileVisitors an.
+
+Ein FileVisitor muss folgende Methoden implementieren:
+\begin{itemize}
+  \item preVisitDirectory()
+  \item visitFile()
+  \item visitFileFailed()
+  \item postVisitDirectory()
+\end{itemize}
+Diese stellen die Möglichkeiten zur Verfügung, beim Iterieren sehr feingranular Operationen auszuführen, so dass man nicht nur auf jeder
+Datei (\texttt{visitFile}), sondern auch beim Eintritt (\texttt{preVisitDirectory}) und Austritt (\texttt{postVisitDirectory})
+aus einem Verzeichnis, sowie im Fehlerfall (\texttt{visitFileFailed}) eine Aktion ausführen lassen kann.
+
+Den Iterationsprozess kann man durch Rückgabewerte der zuvor genannten Operationen beeinflussen mit
+\begin{itemize}
+  \item CONTINUE\\
+  Zur nächsten Datei gehen
+  \item TERMINATE\\
+  Iteration abbrechen
+  \item SKIP\_SUBTREE\\
+  Dieses Unterverzeichnis überspringen
+  \item SKIP\_SIBLINGS\\
+  Alle Verzeichnisse auf gleicher Ebene überspringen
+\end{itemize}
+aus der Enumeration \jd{FileVisitResult}.
+
+Das folgende Beispiel zeigt die Ausgabe des Dateinamens jeder vorhandenen Datei in einem Verzeichnis mit Hilfe des
+\jd{SimpleFileVisitor}s, einer Klasse, die das \jd{FileVisitor}-Interface bereits vorimplementiert, sodass nur noch die
+benötigten Methoden (hier \texttt{visitFile}) überschrieben werden müssen:
+\begin{lstlisting}[language=java,breaklines=true]
+Path p1 = 
+  Paths.get("test/a", "aa/dok1.txt");
+
+Files.walkFileTree(p1.getName(0), 
+  new SimpleFileVisitor<Path>() {
+	@Override
+	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+      System.out.println(file);
+      return FileVisitResult.CONTINUE;
+	}
+});
+\end{lstlisting}
+
+\SubSection{Verzeichnisse im Dateisystem ueberwachen}
+Java 7 bietet die Möglichkeit, komfortabel Verzeichnisse in einem Dateisystem auf bestimmte Änderungen zu überwachen.
+Dies wird über einen \jd{WatchService}s realisiert. Dabei kann ein WatchService auf ein bestimmtes Verzeichnis registriert
+werden. Es ist möglich, zu bestimmen, bei welchen Operationen ein Event kreiert werden soll.
+\begin{itemize}
+  \item ENTRY\_CREATE
+  \item ENTRY\_DELETE
+  \item ENTRY\_MODIFY
+\end{itemize}
+sind die drei vorhandenen Arten aus der Klasse \jd{StandardWatchEventKinds}.
+
+Das folgende Beispiel illustriert die Registrierung eines WatchServices auf das Verzeichnis \texttt{test/b/} aus den vorherigen
+Beispielen und überwacht dabei, ob eine neue Datei angelegt wurde.
+\begin{lstlisting}[language=java,breaklines=true]
+Path p2 = Paths.get("test/b/");
+
+WatchService ws = FileSystems.getDefault().newWatchService();
+WatchKey wk = p2.register(ws, StandardWatchEventKinds.ENTRY_CREATE
+);
+
+try{
+  WatchKey watchKey = ws.poll(60,TimeUnit.SECONDS);
+  List<WatchEvent<?>> events = wk.pollEvents();
+  for(WatchEvent<?> event : events)
+    System.out.println("Datei erstellt");
+}catch(InterruptedException e){
+  Thread.currentThread().interrupt();
+}
+\end{lstlisting}
+
+Insgesamt bringt NIO.2 viele Neuerungen mit, die den Programmierer mit plattformübergreifenden Möglichkeiten zur einfachen
+Manipulation von Dateien und Verzeichnissen ausstatten. 
 
 \Section{ForkJoin-Framework}
 JONAS
