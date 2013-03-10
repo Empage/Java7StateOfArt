@@ -17,6 +17,7 @@
 \usepackage{hyperref}
 \usepackage{breakurl}
 \usepackage{color}
+\usepackage{graphicx}
 
 %for jDoc (begin)
 \usepackage{ifthen}
@@ -308,6 +309,7 @@ weil letztere eine Subklasse von ersterer ist. Dies ist auch nicht möglich, wen
 genannt wird, wie es bei der klassischen Methodik vom Fangen mehrerer Exceptions der Fall ist.
 
 %TODO @Jonas: reminder für dich oder mich?
+%TODO @Matthis: Für dich - Wir hatten drüber geredet und ich meinte ich mach ein TODO rein. War aber dein Topic...
 %->REMINDER: EXCEPTION IST VOM SPEZIELLST MÖGLICHEN TYP.
 \SubSection{Rethrow Exceptions}
 Dieses Feature adressiert den Wunsch der Entwicklergemeinde weniger unnötigen und redundanten Java Code schreiben zu müssen.\cite{sbJ7exeptions}\\
@@ -513,10 +515,22 @@ Insgesamt bringt NIO.2 viele Neuerungen mit, die den Programmierer mit plattform
 Manipulation von Dateien und Verzeichnissen ausstatten. 
 
 \Section{ForkJoin-Framework}
-Bereits in Java 5 wurde mit dem \jd{ThreadPoolExecutor} eine zentrale Eingangs-Queue für neue Tasks (\jd{Runnable} oder \jd{Callable}) etabliert, die alle Worker Threads gemeinsam nutzen. Nun gibt es mit Java 7 eine weitere Implementierung von \jd{AbstractExecutorService}. Sie basiert auf dem Konzept des Fork/Join Frameworks\cite{forkjoinpaper} von Doug Lea.\cite{forkjoinheise}\\
+Bereits in Java 5 wurde mit dem \jd{ThreadPoolExecutor} eine zentrale Eingangs-\jd{Queue} für neue Tasks (\jd{Runnable} oder \jd{Callable}) etabliert, die alle Worker Threads gemeinsam nutzen. Nun gibt es mit Java 7 eine weitere Implementierung von \jd{AbstractExecutorService}. Sie basiert auf dem Konzept des Fork/Join Frameworks\cite{forkjoinpaper} von Doug Lea.\cite{forkjoinheise}\\
 
-[TODO]
+Das ForkJoin-Framework ermöglich dabei eine besonders effektive Bearbeitung von Algorithmen, die nach dem Teile-und-Hersche-Verfahren funktionieren. Eine weitere Anwendungsmöglichkeit sind MapReduce Anwendungen.\\
 
+\begin{figure}[h!]
+\includegraphics[width=8cm]{../images/forkjoin.png}
+\caption[Fork/Join Image.]{Ein ForkJoinPool mit zwei Worker Threads A und B. Neben der Eingangs-\jd{Queue} existiert zusätzlich eine weitere interne Task \jd{Queue} pro Thread. Jeder Thread arbeitet zunaechst die eigene \jd{Queue} ab, bevor er sich einer anderen zuwendet. Quelle: Heise Developer\cite{forkjoinheise}}
+\label{forkjoinpic}
+\end{figure}
+
+Abbildung \ref{forkjoinpic} zeigt die Funktionsweise des ForkJoin Framworks. Auch hier gibt es einen Threadpool mit einer zentralen Taskqueue. Im Gegensatz zu den Threadpools früherer Java Versionen hat hier jedoch jeder Thread zusätzlich eine eigene lokale \jd{Queue}, die dieser zuerst abarbeitet. Erst wenn diese leer ist greift der Thread auf die Queues anderer Threads im Pool zu. Nur wenn dies ebenfalls nicht mehr möglich ist bezieht er neue Aufgaben aus der Hauptqueue.\\
+
+Durch dieses Vorgehen kann jeder Thread möglichst lange auf der eigenen lokalen \jd{Queue} arbeiten, die intern nun als performantere \jd{Deque} (double-ended queue) realisiert ist. Werden keine Tasks mehr aufgefunden wird der Thread pausiert und bei neuen Tasks von der JVM gezielt wieder angesprochen.\cite{forkjoinheise}\\
+
+%TODO: @Matthis Findest du, dass hier unbefingt noch Code in den Abschnitt muss oder reicht die reine Theorie hier auch?
+ 
 \Section{Conclusion}
 
 % \SubSection{Bla}
