@@ -69,17 +69,34 @@ jonas.traub@de.ibm.com
 Matthis Hauschild\\
 IBM Deutschland\\
 Duale Hochschule Baden-Württemberg\\
-matthis.hauschild@gmail.com\\
+matthis.hauschild@de.ibm.com\\
 }
 
 \maketitle
 \thispagestyle{empty}
 
 \begin{abstract}
-TODO 
+Dieses Dokument beschreibt den Stand der Technik der Java Programmiersprache mit besonderem Fokus auf die
+Sprachänderungen mit dem Sprung auf Version 7 im Jahr 2011 eingeführt wurden.\\
+
+Für Java Entwickler bietet dieses State of the Art einen kompakten Einstieg in die neu geschaffenen Möglichkeiten und
+behandelt gleichzeitig häufige Fehler die den Einstieg in das Release erschweren.
 \end{abstract}
 
 \Section{Introduction}
+
+Seit 2011 bietet Oracle mit Java 7 umfangreiche Erweiterungen an der Programmiersprache im Vergleich zu den Vorgängerversionen an.
+Im Folgenden werden die wichtigsten Änderungen und Erweiterungen näher beschrieben. Neben Änderungen aus Project Coin,
+wie der neue Diamond Operator, Binary literals und try-with-resources, wurden auch einige technisch
+anspruchsvolle Neuerungen realisiert, die im Folgenden betrachtet werden. Hierzu zählen die neuen I/O operationen aus NIO.2 und
+das ForkJoin Framework.\\
+
+An sinnvollen Stellen werden Codebeispiele verwendet um die Sprachneuerungen zu verdeutlichen. Java Klassen sind durch die tiefgestellte
+Markierung \textit{java} gekennzeichnet. Die zugehörigen Fußnoten verweisen auf die Java Documentation\cite{javadocs}. Eine 
+Vollständige Auflistung aller Neuerungen bietet Oracle in den Releasenotes zu Java 7\cite{oracleJavaRel} an.\\
+
+Dieses Dokument soll mit den folgendne Kapiteln einen kurzen und prägnanten Überblick über Sprachänderungen aus Java 7 vermitteln,
+die im Arbeitsalltag besonders häufig relevant sind.
 
 \Section{Diamond Operator}
 Mit Java 5 wurden Generics in die Sprache eingeführt, die sich schnell großer Beliebtheit erfreut haben und von der Entwicklergemeinde sehr gut angenommen wurden. Nun mit Java 7 hat Oracle die Deklaration von Variablen mit Generics deutlich vereinfacht\cite{oracleJavaRel}.\\
@@ -308,9 +325,6 @@ zu hängen. So ist es beispielsweise nicht möglich, \texttt{IOException} und \t
 weil letztere eine Subklasse von ersterer ist. Dies ist auch nicht möglich, wenn die \texttt{FileNotFoundException} zuerst
 genannt wird, wie es bei der klassischen Methodik vom Fangen mehrerer Exceptions der Fall ist.
 
-%TODO @Jonas: reminder für dich oder mich?
-%TODO @Matthis: Für dich - Wir hatten drüber geredet und ich meinte ich mach ein TODO rein. War aber dein Topic...
-%->REMINDER: EXCEPTION IST VOM SPEZIELLST MÖGLICHEN TYP.
 \SubSection{Rethrow Exceptions}
 Dieses Feature adressiert den Wunsch der Entwicklergemeinde weniger unnötigen und redundanten Java Code schreiben zu müssen.\cite{sbJ7exeptions}\\
 
@@ -529,59 +543,6 @@ Abbildung \ref{forkjoinpic} zeigt die Funktionsweise des ForkJoin Framworks. Auc
 
 Durch dieses Vorgehen kann jeder Thread möglichst lange auf der eigenen lokalen \jd{Queue} arbeiten, die intern nun als performantere \jd{Deque} (double-ended queue) realisiert ist. Werden keine Tasks mehr aufgefunden wird der Thread pausiert und bei neuen Tasks von der JVM gezielt wieder angesprochen.\cite{forkjoinheise}\\
 
-%TODO: @Matthis Findest du, dass hier unbefingt noch Code in den Abschnitt muss oder reicht die reine Theorie hier auch?
- 
-\Section{Conclusion}
-
-% \SubSection{Bla}
-% Sample Subsection
-% 
-% \begin{figure}[h]
-%    \caption{Example of caption.}
-% \end{figure}
-% 
-% \noindent Long captions should be set as in 
-% \begin{figure}[h] 
-%    \caption{Example of long caption requiring more than one line. It is 
-%      not typed centered but aligned on both sides and indented with an 
-%      additional margin on both sides of 1~pica.}
-% \end{figure}
-% 
-% \SubSection{Footnotes}
-% 
-% Please use footnotes sparingly%
-% \footnote
-%    {%
-%      Or, better still, try to avoid footnotes altogether.  To help your 
-%      readers, avoid using footnotes altogether and include necessary 
-%      peripheral observations in the text (within parentheses, if you 
-%      prefer, as in this sentence).
-%    }
-% and place them at the bottom of the column on the page on which they are 
-% referenced. Use Times 8-point type, single-spaced.
-% 
-% \SubSection{References}
-% 
-% List and number all bibliographical references in 9-point Times, 
-% single-spaced, at the end of your paper. When referenced in the text, 
-% enclose the citation number in square brackets, for example~\cite{javainsel2}. 
-% Where appropriate, include the name(s) of editors of referenced books.
-% 
-% %------------------------------------------------------------------------- 
-% \SubSection{Illustrations, graphs, and photographs}
-% 
-% All graphics should be centered. Your artwork must be in place in the 
-% article (preferably printed as part of the text rather than pasted up). 
-% If you are using photographs and are able to have halftones made at a 
-% print shop, use a 100- or 110-line screen. If you must use plain photos, 
-% they must be pasted onto your manuscript. Use rubber cement to affix the 
-% images in place. Black and white, clear, glossy-finish photos are 
-% preferable to color. Supply the best quality photographs and 
-% illustrations possible. Penciled lines and very fine lines do not 
-% reproduce well. Remember, the quality of the book cannot be better than 
-% the originals provided. Do NOT use tape on your pages!
-
-%------------------------------------------------------------------------- 
 \bibliographystyle{latex8}
 \bibliography{../stateofart}
 
