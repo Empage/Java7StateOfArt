@@ -77,54 +77,58 @@ matthis.hauschild@de.ibm.com\\
 
 \begin{abstract}
 Dieses Dokument beschreibt den Stand der Technik der Java Programmiersprache mit besonderem Fokus auf die
-Sprachänderungen mit dem Sprung auf Version 7 im Jahr 2011 eingeführt wurden.\\
+Sprachänderungen, die mit dem Sprung auf Version 7 aus dem Jahr 2011 eingeführt wurden.\\
 
 Für Java Entwickler bietet dieses State of the Art einen kompakten Einstieg in die neu geschaffenen Möglichkeiten und
-behandelt gleichzeitig häufige Fehler die den Einstieg in das Release erschweren.
+behandelt gleichzeitig häufige Fehler, die den Einstieg in das Release erschweren.
 \end{abstract}
 
 \Section{Introduction}
 
-Seit 2011 bietet Oracle mit Java 7 umfangreiche Erweiterungen an der Programmiersprache im Vergleich zu den Vorgängerversionen an.
+Seit 2011 bietet Oracle mit Java 7 umfangreiche Erweiterungen, an der Programmiersprache im Vergleich zu den Vorgängerversionen, an.
 Im Folgenden werden die wichtigsten Änderungen und Erweiterungen näher beschrieben. Neben Änderungen aus Project Coin,
 wie der neue Diamond Operator, Binary literals und try-with-resources, wurden auch einige technisch
-anspruchsvolle Neuerungen realisiert, die im Folgenden betrachtet werden. Hierzu zählen die neuen I/O operationen aus NIO.2 und
+anspruchsvolle Neuerungen realisiert, die im Folgenden betrachtet werden. Hierzu zählen die neuen I/O Operationen aus NIO.2 und
 das ForkJoin Framework.\\
 
-An sinnvollen Stellen werden Codebeispiele verwendet um die Sprachneuerungen zu verdeutlichen. Java Klassen sind durch die tiefgestellte
+An sinnvollen Stellen werden Codebeispiele verwendet, um die Sprachneuerungen zu verdeutlichen. Java Klassen sind durch die tiefgestellte
 Markierung \textit{java} gekennzeichnet. Die zugehörigen Fußnoten verweisen auf die Java Documentation\cite{javadocs}. Eine 
-Vollständige Auflistung aller Neuerungen bietet Oracle in den Releasenotes zu Java 7\cite{oracleJavaRel} an.\\
+vollständige Auflistung aller Neuerungen bietet Oracle in den Releasenotes zu Java 7\cite{oracleJavaRel} an.\\
 
-Dieses Dokument soll mit den folgendne Kapiteln einen kurzen und prägnanten Überblick über Sprachänderungen aus Java 7 vermitteln,
+Dieses Dokument soll mit den folgenden Kapiteln einen kurzen und prägnanten Überblick über Sprachänderungen aus Java 7 geben,
 die im Arbeitsalltag besonders häufig relevant sind.
 
 \Section{Diamond Operator}
-Mit Java 5 wurden Generics in die Sprache eingeführt, die sich schnell großer Beliebtheit erfreut haben und von der Entwicklergemeinde sehr gut angenommen wurden. Nun mit Java 7 hat Oracle die Deklaration von Variablen mit Generics deutlich vereinfacht\cite{oracleJavaRel}.\\
+Mit Java 5 wurden Generics in die Sprache eingeführt, die sich schnell großer Beliebtheit erfreut haben und von der Entwicklergemeinde sehr gut angenommen wurden. Nun, mit Java 7, hat Oracle die Deklaration von Variablen mit Generics deutlich vereinfacht.\cite{oracleJavaRel}\\
 
-Noch in Java 6 musste der Typ in Generics einer Deklaration mehrfach angegeben werden.
+Noch in Java 6 musste der Typ in einer Deklaration mit Generics mehrfach angegeben werden.
 \begin{lstlisting}[language=java,breaklines=true]
-  List<Integer> name = new ArrayList<Integer>();
-  Map<Integer,List<String>> name2 = new Map<Integer,List<String>>();
+  List<Integer> name =
+    new ArrayList<Integer>();
+  Map<Integer,List<String>> name2 =
+    new Map<Integer,List<String>>();
 \end{lstlisting}
-Java 7 unterstützt nun das automatische Rückschließen auf den deklarieren Datentyp bei der initialisierung.\cite{v2bJava7} Statt der erneuten Angabe des Typs kann hier nun der Diamantoperator verwendet werden.
+Java 7 unterstützt nun das automatische Rückschließen auf den deklarieren Datentyp bei der Initialisierung.\cite{v2bJava7} Statt der erneuten Angabe des Typs kann hier nun der Diamantoperator verwendet werden.
 \begin{lstlisting}[language=java,breaklines=true]
   List<Integer> = new ArrayList<>();
-  Map<Integer,List<String>> name2 = new Map<>();
+  Map<Integer,List<String>> name2 =
+    new Map<>();
 \end{lstlisting}
 Insbesondere bei verschachtelten Deklarationen ist dieses Feature in Verbindung mit der Autovervollständigung einer IDE sehr nützlich. Der Diamantoperator kann auch verwendet werden, wenn Initialisierung und Deklaration nicht in der selben Codezeile erfolgen.\cite{v2bJava7}\\
 
 Auch die Verwendung in Verbindung mit dem Wildcardoperator wurde ermöglicht.
 \begin{lstlisting}[language=java,breaklines=true]
-  List<? extends Number> = new ArrayList<>();
+  List<? extends Number> =
+    new ArrayList<>();
 \end{lstlisting}
-Es wird hier bei der Initialisierung immer auf die Höchste mögliche Klasse zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
+Es wird hier bei der Initialisierung immer auf den allgemeinst möglichen Typ zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
 
 \Section{try-with-resources}\label{try_sec}
-Neu mit Java 7 ist das Automatic Resource Management, oft auch \texttt{try-with-resources} genannt, was die normale try-catch-finally 
-Routine erweitert, um die beiden folgenden Probleme zu adressieren:\cite{javainsel2}
+Neu mit Java 7 ist das Automatic Resource Management\cite{javainsel2}, oft auch \texttt{try-with-resources} genannt, was die normale try-catch-finally 
+Routine erweitert, um die beiden folgenden Probleme zu adressieren:
 \begin{enumerate}
 \item Das Schließen einer Ressource benötigt oft ein zusätzliches try-catch
-\item Eine Ausnahme im finally-Block überdeckt eine etwaige Ausnahme aus dem try-Block
+\item Eine Exception im finally-Block überdeckt eine etwaige Exception aus dem try-Block
 \end{enumerate}
 
 Mit Ressourcen sind hier alle Klassen gemeint, die die neue Schnittstelle \jd{AutoClosable} implementieren, wie beispielsweise
@@ -132,7 +136,7 @@ InputBuffer- und OutputBuffer-Klassen, aber auch die JDBC-Klassen \jd{Connection
 
 Um \texttt{try-with-resources} nutzen zu können, wird die Syntax des \texttt{try}s um einen Anweisungsblock in runden Klammern erweitert,
 in dem nun alle, am Ende zu schließenden, Ressourcen initialisiert werden. Das folgende Beispiel illustriert den Unterschied zwischen der
-klassischen Variante des manuellen Schließens der geöffneten Ressourcen sowie der neuen Variante mit \texttt{try-with-resources}:
+klassischen Variante des manuellen Schließens der geöffneten Ressourcen, sowie der neuen Variante mit \texttt{try-with-resources}:
 
 \begin{lstlisting}[language=java,breaklines=true]
 Connection con = null;
@@ -143,7 +147,8 @@ try {
   con = DriverManager.getConnection(
 	"jdbc:hsqldb:file:/tmp/hsql;shutdown=true", "root", "");
   stmt = con.createStatement();
-  rs = stmt.executeQuery("SELECT * FROM Customer");
+  rs = stmt.executeQuery(
+    "SELECT * FROM Customer" );
   while (rs.next()) {
 	System.out.printf("%s, %s%n", rs.getString(1), rs.getString(2));
   }
@@ -168,7 +173,7 @@ try {
 \end{lstlisting}
 
 Es ist zu erkennen, dass, um alle drei Ressourcen sicher schließen zu können, drei ineinander verschachtelte try-catch-finally Blöcke
-gebraucht werden. Ein weiterer Nachteil dieser Lösung ist das Verschlucken einer Exception, wenn gleichzeitig in Zeile 2 sowie in einer
+gebraucht werden. Ein weiterer Nachteil dieser Lösung ist das Unterdrücken einer Exception, wenn gleichzeitig in Zeile 2 sowie in einer
 der \texttt{close()}-Methoden eine Exception geworfen wird. Dann überdeckt die Exception der \texttt{close()}-Anweisung die andere und der
 Anwender bekommt sie niemals zu Gesicht.\cite{javainsel2}
 
@@ -178,7 +183,8 @@ try (
 	"jdbc:hsqldb:file:/tmp/hsql;shutdown=true", "root", ""
   );
   Statement stmt = con.createStatement();
-  ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
+  ResultSet rs = stmt.executeQuery(
+    "SELECT * FROM Customer");
 ) {
   while (rs.next()) {
 	System.out.printf("%s, %s%n", rs.getString(1), rs.getString(2));
@@ -188,7 +194,7 @@ try (
 }
 \end{lstlisting}
 
-Bei \texttt{try-with-resources} kann man alle Ressourcen (die \jd{AutoClosable} implementieren) mit Semikola getrennt 
+Bei \texttt{try-with-resources} kann man alle Ressourcen, die \jd{AutoClosable} implementieren, mit Semikola getrennt 
 nach dem \texttt{try} auflisten. Damit werden sie automatisch am Ende des Blocks geschlossen und falls mehrere Exceptions auftreten,
 werden alle an den Anwender hochgereicht. Wie das genau gemacht wird, wird in Kapitel \ref{supp_exception_subsec} erläutert. 
 
