@@ -106,19 +106,19 @@ Noch in Java 6 musste der Typ in einer Deklaration mit Generics mehrfach angegeb
   List<Integer> name =
     new ArrayList<Integer>();
   Map<Integer,List<String>> name2 =
-    new HashMap<Integer,List<String>>();
+    new Map<Integer,List<String>>();
 \end{lstlisting}
 Java 7 unterstützt nun das automatische Rückschließen auf den deklarieren Datentyp bei der Initialisierung.\cite{v2bJava7} Statt der erneuten Angabe des Typs kann hier nun der Diamantoperator verwendet werden.
 \begin{lstlisting}[language=java,breaklines=true]
-  List<Integer> name3 = new ArrayList<>();
-  Map<Integer,List<String>> name4 =
-    new HashMap<>();
+  List<Integer> = new ArrayList<>();
+  Map<Integer,List<String>> name2 =
+    new Map<>();
 \end{lstlisting}
 Insbesondere bei verschachtelten Deklarationen ist dieses Feature in Verbindung mit der Autovervollständigung einer IDE sehr nützlich. Der Diamantoperator kann auch verwendet werden, wenn Initialisierung und Deklaration nicht in der selben Codezeile erfolgen.\cite{v2bJava7}\\
 
 Auch die Verwendung in Verbindung mit dem Wildcardoperator wurde ermöglicht.
 \begin{lstlisting}[language=java,breaklines=true]
-  List<? extends Number> name5 =
+  List<? extends Number> =
     new ArrayList<>();
 \end{lstlisting}
 Es wird hier bei der Initialisierung immer auf den allgemeinst möglichen Typ zurück geschlossen. Im konkreten Beispiel also auf \jd{Number}.\cite{v2bJava7}
